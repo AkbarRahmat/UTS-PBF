@@ -23,6 +23,22 @@ class UserSeeder extends Seeder
             'role' => 'admin',
         ]);
 
-        User::factory()->count(25)->create();
+        User::create([
+            'id' => '2',
+            'name' => 'Orang',
+            'email' => 'orang@gmail.com',
+            'password' => bcrypt('orang'),
+            'role' => 'user',
+        ]);
+
+        User::create([
+            'id' => '3',
+            'name' => 'User',
+            'email' => 'user@gmail.com',
+            'password' => bcrypt('user'),
+            'role' => 'user',
+        ]);
+
+        User::factory()->count(3)->create();
     }
 }
