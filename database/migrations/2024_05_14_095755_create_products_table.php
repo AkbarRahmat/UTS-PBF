@@ -23,6 +23,7 @@ return new class extends Migration
             $table->timestamp('expired_at');
             $table->string('modified_by');
             $table->timestamps();
+            $table->softDeletes();
         });
     }
 
