@@ -22,18 +22,21 @@ class AuthMiddleware
 
         if ($jwt == 'null' || $jwt == '') {
             return response()->json([
-                'msg' => 'Akses ditolak, token tidak memenuhi'
-            ], 401);
-        } else {
-            $jwtDecoded = JWT::decode($jwt, new Key(env('JWT_SECRET_KEY'), 'HS256'));
-
-            if ($jwtDecoded->role == 'admin') {
-                return $next($request);
-            }
-
-            return response()->json([
-                'msg' => 'Akses ditolak, token tidak memenuhi'
+                'success' => false,
+                'message' => 'Error Token',
             ], 401);
         }
+
+        $jwtDecoded = JWT::decode($jwt, new Key(env('JWT_SECRET_KEY'), 'HS256'));
+
+        if ($jwtDecoded->role != 'admin') {
+            return response()->json([
+                'success' => false,
+                'message' => 'Error Token',
+            ], 401);
+
+        }
+
+        return $next($request);
     }
 }

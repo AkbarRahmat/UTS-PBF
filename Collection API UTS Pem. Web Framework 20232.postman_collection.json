@@ -41,7 +41,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"isi kan <name> <categories>\"\r\n}",
+							"raw": "{\r\n    \"name\": \"accessories\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -67,7 +67,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"isi kan <name> <categories>\"\r\n}",
+							"raw": "{\r\n    \"name\": \"cloud\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -159,7 +159,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"name\": \"tes\",\r\n    \"description\": \"lorem 200 asdjadldkadkasmdlk\",\r\n    \"price\": 30000,\r\n    \"category_id\": 1,\r\n    \"expired_at\": \"22-10-2024\",\r\n    \"image\": \"image\",\r\n    \"modified_by\": \"orang@gmail.com\"\r\n}",
+							"raw": "{\r\n    \"name\": \"tessu\",\r\n    \"description\": \"lorem 600 asdjadldkadkasmdlk\",\r\n    \"price\": 50000,\r\n    \"category_id\": 2,\r\n    \"expired_at\": \"28-10-2024\",\r\n    \"image\": \"https://w0.peakpx.com/wallpaper/420/942/HD-wallpaper-small-smile-smile-small-anime-kopianget.jpg\",\r\n    \"modified_by\": \"user@gmail.com\"\r\n}",
 							"options": {
 								"raw": {
 									"language": "json"
@@ -264,11 +264,16 @@
 	"variable": [
 		{
 			"key": "baseUrl",
-			"value": "localhost"
+			"value": "http://localhost:8000"
 		},
 		{
 			"key": "jwtToken",
 			"value": "",
+			"type": "string"
+		},
+		{
+			"key": "id",
+			"value": "2",
 			"type": "string"
 		}
 	]
