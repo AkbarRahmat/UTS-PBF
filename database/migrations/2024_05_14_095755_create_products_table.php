@@ -20,7 +20,7 @@ return new class extends Migration
             $table->integer('price');
             $table->string('image');
             $table->unsignedBigInteger('category_id');
-            $table->timestamp('expired_at')->nullable();
+            $table->date('expired_at');
             $table->string('modified_by');
             $table->timestamps();
             $table->softDeletes();

@@ -20,29 +20,35 @@ class UserController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->messages(), 422);
+            return response()->json([
+                'success' => false,
+                'message' => 'Error Validation',
+                'data' => $validator->errors()
+            ], 422);
         }
         $validated = $validator->validated();
 
-        if (Auth::attempt($validated)) {
-            $payload = [
-                'name' => 'Administrator',
-                'role' => 'admin',
-                'iat' => Carbon::now()->timestamp,
-                'exp' => Carbon::now()->timestamp + 60 * 60 * 2,
-            ];
-
-            $token = JWT::encode($payload, env('JWT_SECRET_KEY'), 'HS256');
-
+        if (!Auth::attempt($validated)) {
             return response()->json([
-                'msg' => 'token berhasil dibuat',
-                'data' => 'Bearer ' . $token
-            ], 200);
-        } else {
-            return response()->json([
-                'msg' => 'Email atau password salah'
+                'success' => false,
+                'message' => 'Login Failed'
             ], 422);
         }
+
+        $payload = [
+            'name' => 'Administrator',
+            'role' => 'admin',
+            'iat' => Carbon::now()->timestamp,
+            'exp' => Carbon::now()->timestamp + 60 * 60 * 2,
+        ];
+
+        $token = JWT::encode($payload, env('JWT_SECRET_KEY'), 'HS256');
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Login Succes',
+            'data' => 'Bearer ' . $token
+        ], 200);
     }
 
     public function register(Request $request)
@@ -54,7 +60,11 @@ class UserController extends Controller
         ]);
 
         if ($validator->fails()) {
-            return response()->json($validator->messages(), 422);
+            return response()->json([
+                'success' => false,
+                'message' => 'Error Validation',
+                'data' => $validator->errors()
+            ], 422);
         }
 
         $user = User::create([
@@ -73,8 +83,9 @@ class UserController extends Controller
         $token = JWT::encode($payload, env('JWT_SECRET_KEY'), 'HS256');
 
         return response()->json([
-            'msg' => 'User berhasil registrasi',
+            'success' => true,
+            'message' => 'User Registered',
             'data' => 'Bearer ' . $token
-        ], 201);
+        ], 200);
     }
 }
