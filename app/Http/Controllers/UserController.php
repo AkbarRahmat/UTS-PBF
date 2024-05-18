@@ -35,9 +35,10 @@ class UserController extends Controller
             ], 422);
         }
 
+        $user = Auth::user();
         $payload = [
-            'name' => 'Administrator',
-            'role' => 'admin',
+            'name' => $user->name,
+            'role' => $user->role,
             'iat' => Carbon::now()->timestamp,
             'exp' => Carbon::now()->timestamp + 60 * 60 * 2,
         ];

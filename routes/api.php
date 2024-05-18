@@ -20,16 +20,21 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::middleware(['jwt-auth'])->group(function () {
-    Route::get('products', [ProductControler::class, 'read']);
-    Route::get('products/{id}', [ProductControler::class, 'readById']);
-    Route::post('products', [ProductControler::class, 'create']);
-    Route::put('products/{id}', [ProductControler::class, 'update']);
-    Route::delete('products/{id}', [ProductControler::class, 'delete']);
-    Route::get('categories', [CategoryControler::class, 'read']);
-    Route::get('categories/{id}', [CategoryControler::class, 'readById']);
-    Route::post('categories', [CategoryControler::class, 'create']);
-    Route::put('categories/{id}', [CategoryControler::class, 'update']);
-    Route::delete('categories/{id}', [CategoryControler::class, 'delete']);
+    Route::middleware(['role-everyone'])->group(function() {
+        Route::get('products', [ProductControler::class, 'read']);
+        Route::get('products/{id}', [ProductControler::class, 'readById']);
+        Route::post('products', [ProductControler::class, 'create']);
+        Route::put('products/{id}', [ProductControler::class, 'update']);
+        Route::delete('products/{id}', [ProductControler::class, 'delete']);
+    });
+    
+    Route::middleware(['role-admin'])->group(function() {
+        Route::get('categories', [CategoryControler::class, 'read']);
+        Route::get('categories/{id}', [CategoryControler::class, 'readById']);
+        Route::post('categories', [CategoryControler::class, 'create']);
+        Route::put('categories/{id}', [CategoryControler::class, 'update']);
+        Route::delete('categories/{id}', [CategoryControler::class, 'delete']);
+    });
 });
 
 Route::post('/login', [UserController::class, 'login']);

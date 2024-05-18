@@ -3,11 +3,11 @@
 namespace App\Http\Middleware;
 
 use Closure;
-use Illuminate\Http\Request;
 use Firebase\JWT\JWT;
 use Firebase\JWT\Key;
+use Illuminate\Http\Request;
 
-class AuthMiddleware
+class UserMiddleware
 {
     /**
      * Handle an incoming request.
@@ -19,14 +19,14 @@ class AuthMiddleware
     public function handle(Request $request, Closure $next)
     {
         $jwt = $request->bearerToken();
+        $jwtDecoded = JWT::decode($jwt, new Key(env('JWT_SECRET_KEY'), 'HS256'));
 
-        if ($jwt == 'null' || $jwt == '') {
+        if ($jwtDecoded->role != 'user') {
             return response()->json([
                 'success' => false,
-                'message' => 'Error Token',
+                'message' => 'Only Role User',
             ], 401);
         }
-
         return $next($request);
     }
 }
