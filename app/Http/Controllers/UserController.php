@@ -5,10 +5,14 @@ namespace App\Http\Controllers;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Firebase\JWT\JWT;
+use Firebase\JWT\Key;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Storage;
+use Laravel\Socialite\Facades\Socialite;
 use Carbon\Carbon;
+use GuzzleHttp\Client;
 
 class UserController extends Controller
 {
@@ -88,5 +92,56 @@ class UserController extends Controller
             'message' => 'User Registered',
             'data' => 'Bearer ' . $token
         ], 200);
+    }
+
+    public function redirectGoogle()
+    {
+        $parameters = [
+            'client_id' => env('GOOGLE_CLIENT_ID'),
+            'redirect_uri' => 'http://127.0.0.1:8000/api/oauth/register/call-back',
+            'response_type' => 'code',
+            'scope' => 'email profile',
+            'access_type' => 'offline',
+            'include_granted_scopes' => 'true',
+            'state' => 'state_parameter_passthrough_value',
+            'prompt' => 'consent' // Ensure the consent screen is shown
+        ];
+
+        $authUrl = 'https://accounts.google.com/o/oauth2/v2/auth?' . http_build_query($parameters);
+        return response()->json([
+            'success' => true,
+            'redirect' => $authUrl
+        ], 200);
+    }
+
+    public function callbackGoogle(Request $request)
+    {
+        $code = $request->input('code');
+        if (!$code) {
+            return response()->json([
+                'success' => false,
+                'message' => 'Authorization code not found'
+            ], 400);
+        }
+
+        $client = new Client();
+
+        $response = $client->post('https://oauth2.googleapis.com/token', [
+            'form_params' => [
+                'code' => $code,
+                'client_id' => env('GOOGLE_CLIENT_ID'),
+                'client_secret' => env('GOOGLE_CLIENT_SECRET'),
+                'redirect_uri' => env('GOOGLE_REDIRECT_URI'),
+                'grant_type' => 'authorization_code',
+                'access_type' => 'offline',
+            ],
+        ]);
+        $tokenData = json_decode($response->getBody(), true);
+        $accessToken = $tokenData['access_token'];
+
+        return response()->json([
+            'success' => true,
+            'data' => $accessToken
+        ], 400);
     }
 }

@@ -27,7 +27,7 @@ Route::middleware(['jwt-auth'])->group(function () {
         Route::put('products/{id}', [ProductControler::class, 'update']);
         Route::delete('products/{id}', [ProductControler::class, 'delete']);
     });
-    
+
     Route::middleware(['role-admin'])->group(function() {
         Route::get('categories', [CategoryControler::class, 'read']);
         Route::get('categories/{id}', [CategoryControler::class, 'readById']);
@@ -39,3 +39,6 @@ Route::middleware(['jwt-auth'])->group(function () {
 
 Route::post('/login', [UserController::class, 'login']);
 Route::post('/register', [UserController::class, 'register']);
+
+Route::get('oauth/register', [UserController::class, 'redirectGoogle']);
+Route::get('oauth/register/call-back', [UserController::class, 'callbackGoogle']);
